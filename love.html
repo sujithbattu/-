@@ -18,16 +18,110 @@
             justify-content: center;
             text-align: center;
             overflow: hidden;
+            position: relative;
+        }
+        
+        /* Decorative background elements */
+        .background-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .decoration-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.3;
+            filter: blur(5px);
+            animation: float-around 20s linear infinite;
+        }
+        
+        .decoration-heart {
+            position: absolute;
+            font-size: 50px;
+            opacity: 0.15;
+            animation: pulse 3s ease-in-out infinite alternate;
+            transform-origin: center;
+        }
+        
+        .photo-frame {
+            position: absolute;
+            width: 100px;
+            height: 120px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            transform: rotate(var(--rotation));
+            opacity: 0.8;
+            z-index: -1;
+        }
+        
+        .photo-frame::before {
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 30px;
+            background-color: #ffebee;
+            border-radius: 5px;
+        }
+        
+        .photo-frame::after {
+            content: "❤️";
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        @keyframes float-around {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(5%, 10%) rotate(90deg);
+            }
+            50% {
+                transform: translate(10%, 5%) rotate(180deg);
+            }
+            75% {
+                transform: translate(5%, -5%) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.1;
+            }
+            100% {
+                transform: scale(1.1);
+                opacity: 0.2;
+            }
         }
         
         .container {
             max-width: 500px;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 0 30px rgba(255, 105, 180, 0.2);
             position: relative;
             z-index: 1;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 105, 180, 0.3);
         }
         
         h1 {
@@ -184,7 +278,7 @@
     </style>
 </head>
 <body>
-    <div class="hearts" id="hearts"></div>
+    <div class="background-decoration" id="background-decoration"></div>
     
     <div class="container">
         <h1>A Special Challenge</h1>
@@ -213,14 +307,15 @@
             const matchesDisplay = document.getElementById('matches');
             const restartButton = document.getElementById('restart');
             const loveMessage = document.getElementById('love-message');
+            const backgroundDecoration = document.getElementById('background-decoration');
             
             let hasFlippedCard = false;
             let lockBoard = false;
             let firstCard, secondCard;
             let matches = 0;
             
-            // Create hearts background
-            createHearts();
+            // Create decorative background
+            createBackgroundDecoration();
             
             // Create cards
             function createCards() {
@@ -250,6 +345,59 @@
                     
                     gameContainer.appendChild(card);
                 });
+            }
+            
+            function createBackgroundDecoration() {
+                // Remove any existing elements
+                backgroundDecoration.innerHTML = '';
+                
+                // Create decorative circles
+                const colors = ['#ff80ab', '#ff4081', '#f06292', '#ec407a', '#e91e63'];
+                for (let i = 0; i < 10; i++) {
+                    const circle = document.createElement('div');
+                    circle.classList.add('decoration-circle');
+                    
+                    const size = Math.random() * 200 + 50;
+                    circle.style.width = `${size}px`;
+                    circle.style.height = `${size}px`;
+                    circle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    circle.style.left = `${Math.random() * 100}%`;
+                    circle.style.top = `${Math.random() * 100}%`;
+                    circle.style.animationDelay = `${Math.random() * 10}s`;
+                    circle.style.animationDuration = `${Math.random() * 10 + 15}s`;
+                    
+                    backgroundDecoration.appendChild(circle);
+                }
+                
+                // Create decorative hearts
+                const heartSymbols = ['❤️', '💕', '💖', '💘', '💓', '💗', '💞', '💌'];
+                for (let i = 0; i < 10; i++) {
+                    const heart = document.createElement('div');
+                    heart.classList.add('decoration-heart');
+                    heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                    
+                    heart.style.left = `${Math.random() * 100}%`;
+                    heart.style.top = `${Math.random() * 100}%`;
+                    heart.style.animationDelay = `${Math.random() * 5}s`;
+                    
+                    backgroundDecoration.appendChild(heart);
+                }
+                
+                // Create photo frames (like polaroids)
+                for (let i = 0; i < 5; i++) {
+                    const frame = document.createElement('div');
+                    frame.classList.add('photo-frame');
+                    
+                    frame.style.left = `${Math.random() * 90}%`;
+                    frame.style.top = `${Math.random() * 90}%`;
+                    frame.style.setProperty('--rotation', `${(Math.random() - 0.5) * 30}deg`);
+                    
+                    backgroundDecoration.appendChild(frame);
+                }
+                
+                // Create floating hearts that move up
+                createHearts();
             }
             
             function flipCard() {
@@ -443,8 +591,6 @@
             }
             
             function createHearts() {
-                const heartsContainer = document.getElementById('hearts');
-                
                 for (let i = 0; i < 20; i++) {
                     setTimeout(() => {
                         createHeart();
@@ -457,7 +603,6 @@
             }
             
             function createHeart() {
-                const heartsContainer = document.getElementById('hearts');
                 const heart = document.createElement('div');
                 heart.innerHTML = emojiPairs[Math.floor(Math.random() * emojiPairs.length)];
                 heart.classList.add('heart');
@@ -467,7 +612,7 @@
                 heart.style.left = `${Math.random() * 100}%`;
                 heart.style.animationDuration = `${Math.random() * 5 + 10}s`;
                 
-                heartsContainer.appendChild(heart);
+                backgroundDecoration.appendChild(heart);
                 
                 setTimeout(() => {
                     heart.remove();
