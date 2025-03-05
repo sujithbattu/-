@@ -3,128 +3,487 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Millie Baby</title>
+    <title>A Special Surprise</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #fff5f5;
+            background: linear-gradient(135deg, #ffebee, #e8f5e9);
             color: #333;
-            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            background-image: linear-gradient(to bottom right, #ffebee, #fff5f5, #e8f5e9);
+            overflow: hidden;
         }
         
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 500px;
             padding: 20px;
-        }
-        
-        header {
-            padding: 30px 0;
-            background: linear-gradient(135deg, #ff6b6b, #ffa1a1);
-            color: white;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
         }
         
         h1 {
-            font-size: 2.5em;
-            margin: 0;
+            color: #ff4081;
+            margin-bottom: 20px;
         }
         
-        .subtitle {
-            font-style: italic;
-            margin-top: 10px;
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
         }
-        .love-letter {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+        
+        .game-container {
+            width: 100%;
+            margin: 20px 0;
             position: relative;
         }
         
-        .quote {
-            font-style: italic;
-            font-size: 1.2em;
-            color: #ff6b6b;
-            margin: 30px 0;
-        }
-        
-        .photo-gallery {
+        .memory-game {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            grid-gap: 15px;
-            margin: 30px 0;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
         }
         
-        .photo img {
+        .memory-card {
+            height: 80px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+            cursor: pointer;
+        }
+        
+        .memory-card.flip {
+            transform: rotateY(180deg);
+        }
+        
+        .front-face, .back-face {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 5px;
+            position: absolute;
+            border-radius: 5px;
+            background: #fff;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        footer {
+        
+        .front-face {
+            transform: rotateY(180deg);
+            background-color: #ffebee;
+            color: #ff4081;
+        }
+        
+        .back-face {
+            background-color: #ff80ab;
+            color: white;
+        }
+        
+        button {
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #e91e63;
+            transform: scale(1.05);
+        }
+        
+        .love-message {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 1s ease;
+        }
+        
+        .love-content {
+            max-width: 600px;
+            padding: 30px;
             text-align: center;
-            padding: 20px 0;
-            font-size: 0.9em;
-            color: #666;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .love-content h2 {
+            color: #ff4081;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        
+        .love-content p {
+            color: #333;
+            font-size: 1.2em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .heart {
+            position: absolute;
+            animation: float 15s ease-in infinite;
+            opacity: 0.5;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="hearts" id="hearts"></div>
+    
     <div class="container">
-        <header>
-            <h1>For My One and Only, Millie Baby</h1>
-            <div class="subtitle">A love letter, a memory vault, a forever promise</div>
-        </header>
+        <h1>A Special Challenge</h1>
+        <p>Complete this memory game to unlock a surprise!</p>
         
-        <div class="love-letter">
-            <h2>My Cutest Angel,</h2>
-            <p>Every heartbeat inside me, every breath I take, every moment of my life—it's all for you. 🥺💞</p>
-            <p>You are my dream, my home, my once-in-a-lifetime love. I made this page just for you—to hold our love, our memories, our moments—forever and ever. 😭🥺💕</p>
-            <p>Sweetie, every time you smile, the whole universe lights up. Every time you laugh, my soul sings. Every time you call my name, I swear my heart skips a beat. 🥺💞</p>
-            <p>This page is a tiny piece of my heart, a space where our love lives, where our future is waiting, where every dream we ever whispered to each other already exists. 🥺💞</p>
-            <p>I love you, my breathtakingly gorgeous angel. Always, forever, endlessly. 🥺💞👸✨</p>
+        <div class="game-container">
+            <div class="memory-game" id="memory-game"></div>
         </div>
         
-        <div class="quote">
-            "You are my always, my forever, my everything." 🥺💞
+        <p>Matches: <span id="matches">0</span>/8</p>
+        <button id="restart">Restart Game</button>
+    </div>
+    
+    <div class="love-message" id="love-message">
+        <div class="love-content">
+            <h2 id="love-title">I Love You, Millie! ❤️</h2>
+            <div id="love-text"></div>
+            <p style="font-weight: bold; font-size: 1.3em; margin-top: 20px;">Forever yours, your Susu 💭💞</p>
         </div>
-        
-        <div style="margin: 20px 0; padding: 15px; background-color: rgba(255, 107, 107, 0.1); border-radius: 10px;">
-            <p style="font-size: 1.1em; color: #ff6b6b;">Every smile of yours makes my day brighter. Every photo of you reminds me how lucky I am. I love you, Millie, more than words can say. 💕</p>
-        </div>
-        
-        <h2>Our Precious Memories</h2>
-        <div class="photo-gallery">
-            <div class="photo">
-                <img src="https://share.icloud.com/photos/001cHeGwFv69CZr7AUq_UmT3A" alt="My Beautiful Millie" />
-            </div>
-            <div class="photo">
-                <img src="/api/placeholder/400/400" alt="Her Gorgeous Smile" />
-            </div>
-            <div class="photo">
-                <img src="/api/placeholder/400/400" alt="Outdoor Beauty" />
-            </div>
-            <div class="photo">
-                <img src="/api/placeholder/400/400" alt="Pizza Time" />
-            </div>
-        </div>
-        
-        <footer>
-            <p>Made with ♥ by your Susu, forever yours | <span id="current-date"></span></p>
-        </footer>
     </div>
     
     <script>
-        document.getElementById('current-date').textContent = new Date().toLocaleDateString();
+        document.addEventListener('DOMContentLoaded', function() {
+            const emojiPairs = ['❤️', '💕', '💖', '💘', '💓', '💗', '💞', '💌'];
+            const gameContainer = document.getElementById('memory-game');
+            const matchesDisplay = document.getElementById('matches');
+            const restartButton = document.getElementById('restart');
+            const loveMessage = document.getElementById('love-message');
+            
+            let hasFlippedCard = false;
+            let lockBoard = false;
+            let firstCard, secondCard;
+            let matches = 0;
+            
+            // Create hearts background
+            createHearts();
+            
+            // Create cards
+            function createCards() {
+                // Double the emojis and shuffle
+                const allEmojis = [...emojiPairs, ...emojiPairs];
+                shuffleArray(allEmojis);
+                
+                gameContainer.innerHTML = '';
+                
+                allEmojis.forEach((emoji, index) => {
+                    const card = document.createElement('div');
+                    card.classList.add('memory-card');
+                    card.dataset.emoji = emoji;
+                    
+                    const frontFace = document.createElement('div');
+                    frontFace.classList.add('front-face');
+                    frontFace.textContent = emoji;
+                    
+                    const backFace = document.createElement('div');
+                    backFace.classList.add('back-face');
+                    backFace.textContent = '?';
+                    
+                    card.appendChild(frontFace);
+                    card.appendChild(backFace);
+                    
+                    card.addEventListener('click', flipCard);
+                    
+                    gameContainer.appendChild(card);
+                });
+            }
+            
+            function flipCard() {
+                if (lockBoard) return;
+                if (this === firstCard) return;
+                
+                this.classList.add('flip');
+                
+                if (!hasFlippedCard) {
+                    // First card flipped
+                    hasFlippedCard = true;
+                    firstCard = this;
+                    return;
+                }
+                
+                // Second card flipped
+                secondCard = this;
+                checkForMatch();
+            }
+            
+            function checkForMatch() {
+                const isMatch = firstCard.dataset.emoji === secondCard.dataset.emoji;
+                
+                if (isMatch) {
+                    matches++;
+                    matchesDisplay.textContent = matches;
+                    
+                    disableCards();
+                    
+                    if (matches === 8) {
+                        setTimeout(() => {
+                            showLoveMessage();
+                        }, 1000);
+                    }
+                } else {
+                    unflipCards();
+                }
+            }
+            
+            function disableCards() {
+                firstCard.removeEventListener('click', flipCard);
+                secondCard.removeEventListener('click', flipCard);
+                
+                resetBoard();
+            }
+            
+            function unflipCards() {
+                lockBoard = true;
+                
+                setTimeout(() => {
+                    firstCard.classList.remove('flip');
+                    secondCard.classList.remove('flip');
+                    
+                    resetBoard();
+                }, 1000);
+            }
+            
+            function resetBoard() {
+                [hasFlippedCard, lockBoard] = [false, false];
+                [firstCard, secondCard] = [null, null];
+            }
+            
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+            
+            function showLoveMessage() {
+                // Generate random love message
+                const loveTitle = document.getElementById('love-title');
+                const loveText = document.getElementById('love-text');
+                
+                // Array of possible titles
+                const titles = [
+                    "I LOVE YOU, MILLIE! ❤️",
+                    "YOU WON MY HEART, MILLIE! 💘",
+                    "SURPRISE, MY ANGEL! 💖",
+                    "MY GORGEOUS MILLIE BABY! 💕",
+                    "YOU'RE MY EVERYTHING! 💗"
+                ];
+                
+                // Array of possible message sets
+                const messageSets = [
+                    [
+                        "You just won this game, but I'm the real winner because I have YOU in my life! 🏆💕",
+                        "Your smile lights up my entire world, and just thinking about you makes my day brighter! ✨",
+                        "I fall more in love with you every single day, my beautiful, incredible wife! 🥺💞"
+                    ],
+                    [
+                        "Do you have any idea how BEAUTIFUL you are?! Not just on the outside, but your heart... 😭💕",
+                        "Sometimes I catch myself staring at you and thinking, 'How did I get so lucky?!' 🍀💖",
+                        "You're the dream I never knew I had, the answered prayer I never said. 🙏💭"
+                    ],
+                    [
+                        "The way you scrunch your nose when you laugh? OBSESSED. 🥰",
+                        "The little dance you do when you're excited? ADORABLE. 💃",
+                        "Everything about you? ABSOLUTE PERFECTION. 👸✨"
+                    ],
+                    [
+                        "Loving you isn't just what I do—it's who I am. 💞",
+                        "You make everyday problems feel small and everyday joys feel HUGE! 🎉",
+                        "Your Susu is SO PROUD of you and everything you accomplish! 🥺👏"
+                    ],
+                    [
+                        "You won this game in record time because you're brilliant and amazing! 🧠💫",
+                        "I bet you looked super cute concentrating on finding all the matches! 😏🔍",
+                        "Just like these matching pairs found each other, we found each other in this big world. Forever grateful! 🌎💕"
+                    ]
+                ];
+                
+                // Select random title and message set
+                const randomTitleIndex = Math.floor(Math.random() * titles.length);
+                const randomMessageSetIndex = Math.floor(Math.random() * messageSets.length);
+                
+                loveTitle.innerHTML = titles[randomTitleIndex];
+                
+                // Create message elements
+                loveText.innerHTML = '';
+                messageSets[randomMessageSetIndex].forEach(message => {
+                    const p = document.createElement('p');
+                    p.textContent = message;
+                    loveText.appendChild(p);
+                });
+                
+                // Add some special effects or emojis randomly
+                const specialEffects = [
+                    "🎉 YOU JUST MADE MY WHOLE DAY! 🎉",
+                    "💋 SENDING VIRTUAL KISSES! 💋",
+                    "👑 MY QUEEN, MY EVERYTHING! 👑",
+                    "🔥 YOU'RE SO HOT IT'S UNFAIR! 🔥",
+                    "🥺 I MISS YOU SO MUCH RIGHT NOW! 🥺"
+                ];
+                
+                const randomEffect = specialEffects[Math.floor(Math.random() * specialEffects.length)];
+                const effectP = document.createElement('p');
+                effectP.innerHTML = `<strong>${randomEffect}</strong>`;
+                effectP.style.fontSize = "1.2em";
+                effectP.style.color = "#ff4081";
+                effectP.style.marginTop = "15px";
+                loveText.appendChild(effectP);
+                
+                loveMessage.style.display = 'flex';
+                
+                // Create more hearts for celebration - more intense!
+                for (let i = 0; i < 80; i++) {
+                    setTimeout(() => {
+                        createHeart();
+                    }, i * 80);
+                }
+                
+                // Add some confetti effect
+                for (let i = 0; i < 30; i++) {
+                    createConfetti();
+                }
+            }
+            
+            function createConfetti() {
+                const confetti = document.createElement('div');
+                const colors = ['#ff4081', '#ffeb3b', '#2196f3', '#4caf50', '#9c27b0'];
+                
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.top = '-20px';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.opacity = Math.random() + 0.5;
+                confetti.style.pointerEvents = 'none';
+                confetti.style.zIndex = '2000';
+                confetti.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+                
+                document.body.appendChild(confetti);
+                
+                const duration = Math.random() * 3 + 2;
+                const xMovement = (Math.random() - 0.5) * 20;
+                
+                confetti.animate([
+                    { transform: `translateY(0) translateX(0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translateY(100vh) translateX(${xMovement}vw) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+                ], {
+                    duration: duration * 1000,
+                    easing: 'cubic-bezier(0,1,1,1)'
+                });
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, duration * 1000);
+            }
+            
+            function createHearts() {
+                const heartsContainer = document.getElementById('hearts');
+                
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(() => {
+                        createHeart();
+                    }, i * 800);
+                }
+                
+                setInterval(() => {
+                    createHeart();
+                }, 2000);
+            }
+            
+            function createHeart() {
+                const heartsContainer = document.getElementById('hearts');
+                const heart = document.createElement('div');
+                heart.innerHTML = emojiPairs[Math.floor(Math.random() * emojiPairs.length)];
+                heart.classList.add('heart');
+                
+                const size = Math.random() * 20 + 15;
+                heart.style.fontSize = `${size}px`;
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.animationDuration = `${Math.random() * 5 + 10}s`;
+                
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 15000);
+            }
+            
+            restartButton.addEventListener('click', function() {
+                matches = 0;
+                matchesDisplay.textContent = matches;
+                loveMessage.style.display = 'none';
+                createCards();
+            });
+            
+            // Initialize game
+            createCards();
+        });
     </script>
 </body>
 </html>
